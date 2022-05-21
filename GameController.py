@@ -28,9 +28,9 @@ class GameController:
         self.screen = pygame.display.set_mode([window_width, window_height])
         self.mines = mines
         self.game_lost = False
+        self.G = Grid(self.N, self.M, self.mines)
 
     def startNewGame(self, n_pos, m_pos):
-        self.G = Grid(self.N, self.M, self.mines)
         self.G.start_game(m_pos, n_pos)
         self.game_lost = False
 
@@ -53,25 +53,11 @@ class GameController:
         event = self.G.getEvent(n_ind, m_ind)
 
         if event == -2:
-            return False
+            return
 
-        #self.screen.fill(BLACK, (
-        #ho + n_ind * block, 200 + vo + m_ind * block, block, block))
         self.fillRect(n_ind, m_ind,fillColor=BLACK,outlineColor=GREY)
         if event == 0:
-
-            n_lower = n_ind - 1
-            n_higher = n_ind + 2
-            m_lower = m_ind - 1
-            m_higher = m_ind + 2
-            if n_ind == 0:
-                n_lower = n_ind
-            if m_ind == 0:
-                m_lower = m_ind
-            if n_ind == self.N - 1:
-                n_higher = n_ind + 1
-            if m_ind == self.M - 1:
-                m_higher = m_ind + 1
+            (n_lower, n_higher, m_lower, m_higher) = self.getAdjacentBlocks(n_ind,m_ind)
 
             for ii in range(n_lower, n_higher):
                 for jj in range(m_lower, m_higher):
@@ -81,13 +67,10 @@ class GameController:
         else:
             num = self.font.render(str(event), "TRUE", "Blue")
             self.screen.blit(num, (ho + n_ind * block, 200 + vo + m_ind * block))
-        return False
+            return True
 
     def toggleFlag(self, n_ind, m_ind):
         flag_status = self.G.flag(n_ind, m_ind)
-        ho = self.horizontal_offset
-        vo = self.vertical_offset
-        block = self.block_size
         if flag_status == 1:
             self.fillRect(n_ind, m_ind,fillColor=RED,outlineColor=BLACK)
         if flag_status == 0:
@@ -111,4 +94,29 @@ class GameController:
         if outlineColor is not None:
             pygame.draw.rect(self.screen, outlineColor, rect, 1)
 
+    def getAdjacentBlocks(self,n_ind,m_ind):
+        n_lower = n_ind - 1
+        n_higher = n_ind + 2
+        m_lower = m_ind - 1
+        m_higher = m_ind + 2
+        if n_ind == 0:
+            n_lower = n_ind
+        if m_ind == 0:
+            m_lower = m_ind
+        if n_ind == self.N - 1:
+            n_higher = n_ind + 1
+        if m_ind == self.M - 1:
+            m_higher = m_ind + 1
+        return n_lower, n_higher, m_lower, m_higher
 
+    def flagAdjacent(self,n_ind,m_ind):
+        (n_lower, n_higher, m_lower, m_higher) = self.getAdjacentBlocks(n_ind, m_ind)
+        for nn in range(n_lower,n_higher):
+            for mm in range(m_lower,m_higher):
+                pass
+
+    def openAdjacent(self,n_ind,m_ind):
+        (n_lower, n_higher, m_lower, m_higher) = self.getAdjacentBlocks(n_ind, m_ind)
+        for nn in range(n_lower,n_higher):
+            for mm in range(m_lower, m_higher):
+                self.gridChange(nn,mm)
