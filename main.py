@@ -9,7 +9,7 @@ window_height = 700
 
 def main():
 
-    N = 16
+    N = 30
     M = 16
     mines = 40
 

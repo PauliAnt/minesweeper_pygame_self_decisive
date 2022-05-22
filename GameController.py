@@ -15,12 +15,12 @@ class GameController:
         self.N = N
         self.window_height = window_height
         self.window_width = window_width
-        block_width = window_width / M
-        block_height = (window_height - 200) / N
+        block_width = window_width / N
+        block_height = (window_height - 200) / M
 
         self.block_size = int(min(block_height, block_width))
-        self.vertical_offset = int(((window_height - 200) - self.block_size * N) / 2)
-        self.horizontal_offset = int((window_width - self.block_size * M) / 2)
+        self.vertical_offset = int(((window_height - 200) - self.block_size * M) / 2)
+        self.horizontal_offset = int((window_width - self.block_size * N) / 2)
 
         font_size = int(self.block_size * 1.3)
         self.font = pygame.font.SysFont("footlight.ttc", font_size)
@@ -39,7 +39,7 @@ class GameController:
         vo = self.vertical_offset
         block = self.block_size
         self.screen.fill(BLACK)
-        self.screen.fill(GREY, (ho, 200 + vo, self.M * block, self.N * block))
+        self.screen.fill(GREY, (ho, 200 + vo, self.N * block, self.M * block))
         print(self.screen.get_width())
         for x in range(ho, self.window_width - ho, block):
             for y in range(200 + vo, self.window_height - vo, block):
@@ -53,7 +53,7 @@ class GameController:
         event = self.G.getEvent(n_ind, m_ind)
 
         if event == -2:
-            return
+            return False
 
         self.fillRect(n_ind, m_ind,fillColor=BLACK,outlineColor=GREY)
         if event == 0:
@@ -113,10 +113,15 @@ class GameController:
         (n_lower, n_higher, m_lower, m_higher) = self.getAdjacentBlocks(n_ind, m_ind)
         for nn in range(n_lower,n_higher):
             for mm in range(m_lower,m_higher):
-                pass
+                self.flagUp(nn,mm)
 
     def openAdjacent(self,n_ind,m_ind):
         (n_lower, n_higher, m_lower, m_higher) = self.getAdjacentBlocks(n_ind, m_ind)
         for nn in range(n_lower,n_higher):
             for mm in range(m_lower, m_higher):
                 self.gridChange(nn,mm)
+
+    def flagUp(self,n_ind,m_ind):
+        flagStatus = self.G.forceFlag(n_ind,m_ind)
+        if flagStatus:
+            self.fillRect(n_ind, m_ind, fillColor=RED, outlineColor=BLACK)

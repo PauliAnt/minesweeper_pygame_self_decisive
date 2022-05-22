@@ -15,6 +15,10 @@ class Grid:
         self.mines = mines
 
     def start_game(self, n_ind, m_ind):
+        self.bomb_matrix = np.zeros([self.n, self.m])
+        self.resolve_matrix = np.zeros(([self.n,self.m]))
+        self.unopened = np.ones([self.n, self.m])
+        self.flags = np.zeros([self.n, self.m])
         n = self.n
         m = self.m
         available_modules = list(range(0, self.N))
@@ -55,6 +59,14 @@ class Grid:
         self.flags[n_ind, m_ind] = (self.flags[n_ind, m_ind] + 1) % 2
         self.unopened[n_ind, m_ind] = (self.unopened[n_ind, m_ind] + 1) % 2
         return self.flags[n_ind, m_ind]
+
+    def forceFlag(self,n_ind,m_ind):
+        if self.unopened[n_ind,m_ind] == 1 and self.flags[n_ind,m_ind] == 0:
+            self.flags[n_ind, m_ind] = 1
+            self.unopened[n_ind, m_ind] = 0
+            return True
+        return False
+
 
     def getResolve(self, n_ind, m_ind):
         return self.resolve_matrix[n_ind, m_ind]

@@ -9,9 +9,9 @@ window_height = 700
 
 def main():
 
-    N = 16
+    N = 30
     M = 16
-    mines = 40
+    mines = 99
 
     Clock = pygame.time.Clock()
 
@@ -27,24 +27,28 @@ def main():
         gc.drawGrid()
 
         # MAIN LOOP
-        game_started = False
         game_lost = False
-        gc.startNewGame(1, 1)
-        gc.gridChange(1, 1)
+        gc.startNewGame(N//2, M//2)
+        gc.gridChange(N//2, M//2)
         while not game_lost:
             Clock.tick(10)
             (button1, button2, button3) = pygame.mouse.get_pressed(num_buttons=3)
 
             # Check safe spaces
+            gc.updateResolves()
             gc.checkSolved()
+            game_lost = gc.getGameState()
 
             if button1:
                 (n_pos, m_pos) = gc.getMousePosition()
                 gc.gridChange(n_pos, m_pos)
-                game_lost = gc.getGameState()
             elif button3:
                 (n_pos, m_pos) = gc.getMousePosition()
                 gc.addFlag(n_pos, m_pos)
+
+            elif button2:
+                (n_pos, m_pos) = gc.getMousePosition()
+                gc.getResolveInfo(n_pos,m_pos)
 
             # Did the user click the window close button?
             for event in pygame.event.get():
@@ -52,6 +56,8 @@ def main():
                     running = False
             # Flip the display
             pygame.display.update()
+        pygame.time.wait(2000)
+
 
         # Done! Time to quit.
     pygame.quit()

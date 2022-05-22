@@ -6,15 +6,12 @@ class Resolve:
         self.remaining = remaining
         self.unopened = unopened
 
-    def update(self, n_ind, m_ind):
-        if abs(self.n - n_ind) <= 1 and abs(self.m - m_ind) <= 1:
-            self.unopened -= 1
-            print("Opened (",n_ind,m_ind,")",self.n, self.m, self.unopened)
+    def update(self, N):
+        self.unopened = N
 
     def flag(self, n_ind, m_ind):
         if abs(self.n - n_ind) <= 1 and abs(self.m - m_ind) <= 1:
             self.remaining -= 1
-            print("Flag",self.n, self.m, self.remaining)
 
     def checkSolved(self):
         if self.remaining == 0:
@@ -26,3 +23,6 @@ class Resolve:
 
     def getIndex(self):
         return self.n,self.m
+
+    def printInfo(self):
+        print("Position ({},{}), remaining: {}, unopened: {}".format(self.n,self.m,self.remaining,self.unopened))
