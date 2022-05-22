@@ -28,12 +28,12 @@ class GameController:
 
         self.screen = pygame.display.set_mode([window_width, window_height])
         self.mines = mines
-        self.game_lost = False
+        self.game_lost = 0
         self.G = Grid(self.N, self.M, self.mines)
 
     def startNewGame(self, n_pos, m_pos):
         self.G.start_game(m_pos, n_pos)
-        self.game_lost = False
+        self.game_lost = 0
 
     def drawGrid(self):
         ho = self.horizontal_offset
@@ -64,7 +64,7 @@ class GameController:
                 for jj in range(m_lower, m_higher):
                     self.gridChange(ii, jj)
         elif event == -1:
-            self.game_lost = True
+            self.game_lost = -1
         else:
             self.fontInRect(n_ind,m_ind,str(event),"Blue")
             return True
@@ -84,7 +84,11 @@ class GameController:
         return n_pos, m_pos
 
     def getGameState(self):
-        return self.game_lost
+        if self.G.checkResult():
+            print("Truu")
+            return 1
+        else:
+            return self.game_lost
 
     def fillRect(self,n_ind,m_ind,fillColor=None, outlineColor=None):
         rect = pygame.Rect(self.horizontal_offset + n_ind * self.block_size, 200 + self.vertical_offset + m_ind * self.block_size,

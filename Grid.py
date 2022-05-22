@@ -99,3 +99,7 @@ class Grid:
             return True
         else:
             return False
+
+    def checkResult(self):
+        print(np.sum(self.flags-self.bomb_matrix))
+        return np.array_equal(self.flags,self.bomb_matrix)
