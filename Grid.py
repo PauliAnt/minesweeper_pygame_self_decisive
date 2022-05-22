@@ -93,3 +93,9 @@ class Grid:
         if jj == self.m:
             jj_higher = jj + 1
         return ii_lower, ii_higher, jj_lower, jj_higher
+
+    def isUnopened(self,ii,jj):
+        if self.unopened[ii,jj] == 1:
+            return True
+        else:
+            return False

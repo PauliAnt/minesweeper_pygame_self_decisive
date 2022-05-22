@@ -24,6 +24,7 @@ class GameController:
 
         font_size = int(self.block_size * 1.3)
         self.font = pygame.font.SysFont("footlight.ttc", font_size)
+        self.small_font = pygame.font.SysFont("footlight.ttc",int(self.block_size*0.8))
 
         self.screen = pygame.display.set_mode([window_width, window_height])
         self.mines = mines
@@ -65,8 +66,7 @@ class GameController:
         elif event == -1:
             self.game_lost = True
         else:
-            num = self.font.render(str(event), "TRUE", "Blue")
-            self.screen.blit(num, (ho + n_ind * block, 200 + vo + m_ind * block))
+            self.fontInRect(n_ind,m_ind,str(event),"Blue")
             return True
 
     def toggleFlag(self, n_ind, m_ind):
@@ -125,3 +125,12 @@ class GameController:
         flagStatus = self.G.forceFlag(n_ind,m_ind)
         if flagStatus:
             self.fillRect(n_ind, m_ind, fillColor=RED, outlineColor=BLACK)
+
+    def fontInRect(self,n_ind,m_ind,string,Color):
+        num = self.font.render(string, "TRUE", Color)
+        self.screen.blit(num, (self.horizontal_offset + n_ind * self.block_size, 200 + self.vertical_offset + m_ind * self.block_size))
+
+    def smallFontInRect(self, n_ind, m_ind, string, Color):
+        num = self.small_font.render(string, "TRUE", Color)
+        self.screen.blit(num, (
+        self.horizontal_offset + n_ind * self.block_size, 200 + self.vertical_offset + m_ind * self.block_size))

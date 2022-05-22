@@ -1,6 +1,5 @@
-import pygame
 import GameController
-from Resolve import Resolve
+from SimpleAI.Resolve import Resolve
 import numpy as np
 
 BLACK = (0, 0, 0)
@@ -54,6 +53,7 @@ class SimpleAiController(GameController.GameController):
             resolve.update(N)
 
     def checkSolved(self):
+        solved = False
         for resolve in self.resolve_list:
             action = resolve.checkSolved()
             if action == 0:
@@ -61,11 +61,14 @@ class SimpleAiController(GameController.GameController):
                 self.fillRect(n, m, outlineColor=GREEN)
                 self.resolve_list.remove(resolve)
                 self.openAdjacent(n, m)
+                solved = True
             elif action == 1:
                 (n, m) = resolve.getIndex()
                 self.fillRect(n, m, outlineColor=GREEN)
                 self.flagAdjacent(n,m)
                 self.resolve_list.remove(resolve)
+                solved = True
+        return solved
 
     def flagUp(self,n_ind,m_ind):
         flagStatus = self.G.forceFlag(n_ind, m_ind)

@@ -1,6 +1,5 @@
 import pygame
-from GameController import GameController
-from SimpleAiController import SimpleAiController
+from SumAIController import SumAIController
 pygame.font.init()
 
 window_width = 1000
@@ -9,9 +8,9 @@ window_height = 700
 
 def main():
 
-    N = 16
+    N = 30
     M = 16
-    mines = 40
+    mines = 99
 
     Clock = pygame.time.Clock()
 
@@ -19,7 +18,7 @@ def main():
 
     running = True
     # INIT gameController
-    gc = SimpleAiController(window_width, window_height, N, M, mines)
+    gc = SumAIController(window_width, window_height, N, M, mines)
     while running:
 
         # Run until the user asks to quit
@@ -36,8 +35,11 @@ def main():
 
             # Check safe spaces
             gc.updateResolves()
-            gc.checkSolved()
+            solved = gc.checkSolved()
             game_lost = gc.getGameState()
+            if not solved:
+                n_min, m_min = gc.calculateSums()
+                gc.gridChange(n_min,m_min)
 
             if button1:
                 (n_pos, m_pos) = gc.getMousePosition()

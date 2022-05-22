@@ -24,5 +24,11 @@ class Resolve:
     def getIndex(self):
         return self.n,self.m
 
+    def getRemaining(self):
+        return self.remaining
+
+    def getUnopened(self):
+        return self.unopened
+
     def printInfo(self):
         print("Position ({},{}), remaining: {}, unopened: {}".format(self.n,self.m,self.remaining,self.unopened))
